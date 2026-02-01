@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vareonl Software Store</title>
+<style>
+:root{
+  --bg:#020617;
+  --panel:#0f172a;
+  --card:#111827;
+  --accent:#06b6d4;
+  --accent2:#22d3ee;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+}
+*{box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
+body{margin:0;background:linear-gradient(180deg,#020617,#020617,#020617);color:var(--text);}
+header{text-align:center;padding:2rem 1rem;}
+header h1{margin:0;font-size:2.2rem}
+header p{color:var(--muted)}
+.container{max-width:1100px;margin:auto;padding:1.5rem}
+.greeting{background:var(--panel);padding:2rem 1.5rem;border-radius:14px;margin-bottom:2rem;border:1px solid rgba(255,255,255,.05)}
+#greet{display:block;margin-bottom:1rem;font-size:1.2rem;}
+.search-wrapper{position:relative;width:100%}
+.search{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+input{flex:1;padding:.8rem;border-radius:10px;border:none;outline:none}
+button{padding:.8rem 1.2rem;border-radius:10px;border:none;background:var(--accent);color:#022c22;font-weight:600;cursor:pointer;position:relative;overflow:hidden;}
+button::after{content:"";position:absolute;top:0; left:0; width:100%; height:100%;background:linear-gradient(135deg,rgba(255,255,255,0.2),rgba(255,255,255,0));pointer-events:none;transform:translateX(-100%);transition:transform 0.5s ease;}
+button:hover::after{transform:translateX(100%);}
+button:hover{background:var(--accent2)}
+#list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+.product{background:var(--card);border-radius:14px;padding:1.5rem;border:1px solid rgba(255,255,255,.05);opacity:0;transform:translateY(30px);transition:all 0.6s ease;}
+.product.visible{opacity:1;transform:translateY(0);}
+.product:hover{transform:scale(1.03);transition:all 0.3s ease}
+.product h3{margin-top:0}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:1rem}
+.tier{background:rgba(255,255,255,.03);border-radius:12px;padding:.8rem;border:1px solid rgba(255,255,255,.05)}
+.badge{display:inline-block;padding:.25rem .6rem;border-radius:999px;font-size:.75rem;background:rgba(6,182,212,.15);color:var(--accent);margin-bottom:.5rem}
+.actions{margin-top:1rem;display:flex;gap:.7rem;flex-wrap:wrap}
+.secondary{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--text)}
+footer{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.85rem}
+@media(max-width:800px){.tiers{grid-template-columns:1fr}}
+.suggestions{background:var(--card);border:1px solid rgba(255,255,255,.05);border-radius:8px;margin-top:0.3rem;max-height:200px;overflow-y:auto;position:absolute;z-index:10;width:100%;}
+.suggestion{padding:0.5rem 0.8rem;cursor:pointer;}
+.suggestion:hover{background:rgba(6,182,212,.15);}
+</style>
+</head>
+<body>
+<header>
+<h1>Vareonl Software Store</h1>
+<p>Professional software packages</p>
+</header>
+<div class="container">
+<div class="greeting">
+  <strong id="greet"></strong>
+  <div class="search-wrapper">
+    <input id="q" placeholder="Search any product or tool…">
+    <div id="suggestions" class="suggestions"></div>
+  </div>
+</div>
+<div id="list"></div>
+</div>
+<footer>
+© 2026 Vareonl Software Store · All tools are package-based & supported
+</footer>
+<script>
+const greetings=[
+"Welcome 👋 Explore our software packages below.",
+"Hello! Every product comes with Basic, Standard & Premium.",
+"Search freely — all requests are supported.",
+"You're in the right place. Browse or search any tool."
+];
+document.getElementById("greet").innerText=greetings[Math.floor(Math.random()*greetings.length)];
+const products=[
+"Phishing & Incident Response","Phishing Simulation","Incident Playbook Engine","Blockchain Analysis","Crypto Access 2.0","Chainalysis Reactor","Elliptic Navigator","CipherTrace Inspector","Confirm AML Platform","BitScan Explorer","TRM Labs Suite","OXT Explorer","CoinPath Forensics","Blockseer Analytics","Blockchain Forensics SDKs & APIs","Crystal Blockchain","Chain Analysis Lite","Network Tools","SpyVport 8.5","TermConnectX","ServerRootPlus","NetBypass Pro","RootShell Master","VPNGhost 6.0","NetFlow Analyzer","Packet Capture Pro","Certificate Manager","DNS Monitor","CrackSuits Pro (Authorized Pentest Suite)","CloneChatX","Email Password Cracker","Remote Access Tools","MultiCrack Elite","Credential Strength Tester","IP Insights","Social Media Scanner","Password Checkers","Decompiler Tool","Data Encryptor","Malware Scanner","Brute Force Tool","Credential Stealers","Vulnerability Scan Suite","Web App Scanner"
+];
+function createCard(name){return <div class="product"><h3>${name}</h3><div class="tiers"><div class="tier"><span class="badge">Basic</span><p>Entry-level package with guided usage.</p></div><div class="tier"><span class="badge">Standard</span><p>Expanded features, broader coverage.</p></div><div class="tier"><span class="badge">Premium</span><p>Full capability package with customization.</p></div></div><div class="actions"><a href="https://t.me/vareonl" target="_blank"><button>Telegram</button></a><a href="https://wa.me/18124161451" target="_blank"><button class="secondary">WhatsApp</button></a></div></div>;}
+function render(list){document.getElementById("list").innerHTML=list.map(createCard).join("");animate();}
+function animate(){document.querySelectorAll(".product").forEach((el,i)=>{setTimeout(()=>el.classList.add("visible"),i*50);});}
+render(products);
+const input=document.getElementById("q");
+const suggBox=document.getElementById("suggestions");
+input.addEventListener("input",function(){
+  const val=this.value.trim();
+  if(!val){suggBox.innerHTML="";return;}
+  let matches=products.filter(p=>p.toLowerCase().includes(val.toLowerCase()));
+  if(matches.length===0) matches=[val];
+  suggBox.innerHTML=matches.map(m=><div class="suggestion" onclick="selectSuggestion('${m.replace(/'/g,"\'")}')">${m}</div>).join("");
+});
+function selectSuggestion(val){input.value=val;suggBox.innerHTML="";render([val]);}
+</script>
+</body>
+</html>
